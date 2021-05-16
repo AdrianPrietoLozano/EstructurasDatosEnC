@@ -1,74 +1,73 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "lista.h"
+#include "linked_list.h"
 
-void mostrar(Nodo *cabeza);
-int getNumAleatorio()
-{
+
+void printList(LinkedList* list);
+int randNum();
+
+
+int main() {
+    LinkedList* list = createLinkedList();
+    int const SIZE = 20;
+    srand(time(NULL));
+
+    puts("INSERTING...");
+    for (int i = 0; i < SIZE; i++) {
+    	if (i % 2 == 0)
+    		addAtHead(list, randNum());
+    	else
+    		addAtTail(list, randNum());
+
+    	printList(list);
+    }
+
+    addAtIndex(list, 10, 200);
+    printList(list);
+    addAtIndex(list, 1, 99);
+    printList(list);
+    addAtIndex(list, 14, 66);
+    printList(list);
+
+    printf("\nsize: %d\n", list->size);
+    printf("head: %d\n", getAtIndex(list, 0));
+    printf("tail: %d\n", getAtIndex(list, list->size - 1));
+
+    puts("\n---------------------------------------------------------\n");
+
+    puts("DELETING...");
+    int list_size = list->size;
+    for (int i = 0; i < list_size; i++) {
+    	deleteAtIndex(list, 0);
+    	printList(list);
+    }
+
+
+    printf("\nsize: %d\n", list->size);
+    printf("head: %d\n", getAtIndex(list, 0));
+    printf("tail: %d\n", getAtIndex(list, list->size - 1));
+
+
+    freeList(list);
+    return 0;
+}
+
+
+void printList(LinkedList* list) {
+    ListNode* temp = list->head->next;
+
+    while (temp != NULL) {
+        printf("%d", temp->val);
+        temp = temp->next;
+
+        if (temp != NULL)
+        	printf(" -> ");
+    }
+
+    printf("\n");
+}
+
+int randNum() {
 	return (0 + ( rand() % 1000 ));
-}
-
-int main()
-{
-	Nodo *cabeza = NULL;
-	Nodo *actual = NULL;
-	Nodo *cola = NULL;
-
-	// randomize random number generator using current time
-	srand( time( NULL ) );
-
-	inicializarNodos(&cabeza, &actual, &cola);
-	mostrar(cabeza);
-	printf("%s: %u\n", "Tamanio", tamanio(cabeza));
-
-	printf("Insertando elementos\n");
-	// inserta 1000 números aleatorios en la lista
-	for(unsigned i = 0; i < 1000; i++)
-	{
-		insertarAlInicio(&cabeza, &actual, &cola, getNumAleatorio());
-	}
-
-	mostrar(cabeza);
-	printf("%s: %u\n", "Tamanio", tamanio(cabeza));
-
-	printf("\n\n");
-	
-	irAPosicion(cabeza, &actual, 3);
-	printf("%s = %d, %s: %i\n\n", "dato actual", datoActual(cabeza, actual), "posición", posicionActual(cabeza, actual));
-	siguiente(&actual, cola);
-	printf("%s = %d, %s: %i\n\n", "dato actual", datoActual(cabeza, actual), "posición", posicionActual(cabeza, actual));
-	siguiente(&actual, cola);
-	printf("%s = %d, %s: %i\n\n", "dato actual", datoActual(cabeza, actual), "posición", posicionActual(cabeza, actual));
-	siguiente(&actual, cola);
-	printf("%s = %d, %s: %i\n\n", "dato actual", datoActual(cabeza, actual), "posición", posicionActual(cabeza, actual));
-	siguiente(&actual, cola);
-	printf("%s = %d, %s: %i\n\n", "dato actual", datoActual(cabeza, actual), "posición", posicionActual(cabeza, actual));
-	siguiente(&actual, cola);
-	printf("%s = %d, %s: %i\n\n", "dato actual", datoActual(cabeza, actual), "posición", posicionActual(cabeza, actual));
-
-	vaciar(&cabeza, &actual, &cola);
-	printf("%s\n", "Se vació la lista");
-	printf("%s: %u\n", "Tamanio", tamanio(cabeza));
-
-	return 0;
-}
-
-
-
-void mostrar(Nodo *cabeza)
-{
-	if(isEmpty(cabeza))
-		puts("Lista vacia");
-	else
-	{
-		while(cabeza->siguiente != NULL)
-		{
-			printf("%d", cabeza->siguiente->dato);
-			cabeza = cabeza->siguiente;
-
-			if(cabeza->siguiente != NULL) { printf(" --> "); }
-		}
-		printf("\n");
-	}
 }
